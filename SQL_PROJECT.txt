@@ -1,0 +1,769 @@
+                                                                               EMPLOYEE DEPARTMENT ANALYSIS
+
+
+
+mysql> CREATE DATABASE PROJECT;
+Query OK, 1 row affected (0.16 sec)
+
+mysql> use PROJECT;
+Database changed
+
+mysql> drop table if exists Department;
+Query OK, 0 rows affected, 1 warning (0.02 sec)
+
+mysql> CREATE TABLE Department ( deptno integer, dname varchar(25),loc varchar(25), PRIMARY KEY(deptno));
+Query OK, 0 rows affected (0.62 sec)
+
+mysql> INSERT INTO Department  VALUES (10,'OPERATIONS','BOSTON'),(20,'RESEARCH','DALLAS'),(30,'SALES','CHICAGO'),(40,'ACCOUNTING','NEW YORK');
+Query OK, 4 rows affected (0.12 sec)
+Records: 4  Duplicates: 0  Warnings: 0
+
+mysql> select * from Department;
++--------+------------+----------+
+| deptno | dname      | loc      |
++--------+------------+----------+
+|     10 | OPERATIONS | BOSTON   |
+|     20 | RESEARCH   | DALLAS   |
+|     30 | SALES      | CHICAGO  |
+|     40 | ACCOUNTING | NEW YORK |
++--------+------------+----------+
+4 rows in set (0.04 sec)
+
+mysql> drop table if exists Employee;
+Query OK, 0 rows affected, 1 warning (0.01 sec)
+
+mysql> CREATE TABLE Employee(empno int UNIQUE NOT NULL, ename varchar(25),job varchar(25) DEFAULT 'CLERK', mgr integer DEFAULT NULL,hiredate DATE DEFAULT NULL,
+sal decimal(10,2) NOT NULL CHECK(sal > 0), comm decimal(10,2) DEFAULT NULL,deptno integer NOT NULL, FOREIGN KEY (deptno) REFERENCES Department(deptno));
+Query OK, 0 rows affected (0.36 sec) 					
+
+
+mysql> INSERT INTO Employee VALUES (7369,'SMITH','CLERK',7902,'1890-12-17',800.00,NULL,20),(7499,'ALLEN','SALESMAN',7698,'1981-02-20',1600.00,300.00,30),
+(7521,'WARD','SALESMAN',7698,'1981-02-22',1250.00,500.00,30),(7566,'JONES','MANAGER',7839,'1981-04-02',2975.00,NULL,20),(7654,'MARTIN','SALESMAN',7698,'1981-09-28',1250.00,1400.00,30),
+(7698,'BLAKE','MANAGER',7839,'1981-05-01',2850.00,NULL,30),(7782,'CLARK','MANAGER',7839,'1981-06-09',2450.00,NULL,10),(7788,'SCOTT','ANALYST',7566,'1987-04-19',3000.00,NULL,20),
+(7839,'KING','PRESIDENT',NULL,'1981-11-17',5000.00,NULL,10),(7844,'TURNER','SALESMAN',7698,'1981-09-08',1500.00,0.00,30),(7876,'ADAMS','CLERK',7788,'1987-05-23',1100.00,NULL,20),
+(7900,'JAMES','CLERK',7698,'1981-12-03',950.00,NULL,30),(7902,'FORD','ANALYST',7566,'1981-12-03',3000.00,NULL,20),(7934,'MILLER','CLERK',7782,'1982-01-23',1300.00,NULL,10);
+Query OK, 14 rows affected (0.02 sec)
+Records: 14  Duplicates: 0  Warnings: 0
+
+mysql> select * from Employee;
++-------+--------+-----------+------+------------+---------+---------+--------+
+| empno | ename  | job       | mgr  | hiredate   | sal     | comm    | deptno |
++-------+--------+-----------+------+------------+---------+---------+--------+
+|  7369 | SMITH  | CLERK     | 7902 | 1890-12-17 |  800.00 |    NULL |     20 |
+|  7499 | ALLEN  | SALESMAN  | 7698 | 1981-02-20 | 1600.00 |  300.00 |     30 |
+|  7521 | WARD   | SALESMAN  | 7698 | 1981-02-22 | 1250.00 |  500.00 |     30 |
+|  7566 | JONES  | MANAGER   | 7839 | 1981-04-02 | 2975.00 |    NULL |     20 |
+|  7654 | MARTIN | SALESMAN  | 7698 | 1981-09-28 | 1250.00 | 1400.00 |     30 |
+|  7698 | BLAKE  | MANAGER   | 7839 | 1981-05-01 | 2850.00 |    NULL |     30 |
+|  7782 | CLARK  | MANAGER   | 7839 | 1981-06-09 | 2450.00 |    NULL |     10 |
+|  7788 | SCOTT  | ANALYST   | 7566 | 1987-04-19 | 3000.00 |    NULL |     20 |
+|  7839 | KING   | PRESIDENT | NULL | 1981-11-17 | 5000.00 |    NULL |     10 |
+|  7844 | TURNER | SALESMAN  | 7698 | 1981-09-08 | 1500.00 |    0.00 |     30 |
+|  7876 | ADAMS  | CLERK     | 7788 | 1987-05-23 | 1100.00 |    NULL |     20 |
+|  7900 | JAMES  | CLERK     | 7698 | 1981-12-03 |  950.00 |    NULL |     30 |
+|  7902 | FORD   | ANALYST   | 7566 | 1981-12-03 | 3000.00 |    NULL |     20 |
+|  7934 | MILLER | CLERK     | 7782 | 1982-01-23 | 1300.00 |    NULL |     10 |
++-------+--------+-----------+------+------------+---------+---------+--------+
+14 rows in set (0.00 sec)
+
+_______________________________________________________________________________________________________________________________________________________________
+
+3.	List the Names and salary of the employee whose salary is greater than 1000
+
+
+mysql> select ename,sal from Employee where sal>1000;
++--------+---------+
+| ename  | sal     |
++--------+---------+
+| ALLEN  | 1600.00 |
+| WARD   | 1250.00 |
+| JONES  | 2975.00 |
+| MARTIN | 1250.00 |
+| BLAKE  | 2850.00 |
+| CLARK  | 2450.00 |
+| SCOTT  | 3000.00 |
+| KING   | 5000.00 |
+| TURNER | 1500.00 |
+| ADAMS  | 1100.00 |
+| FORD   | 3000.00 |
+| MILLER | 1300.00 |
++--------+---------+
+12 rows in set (0.01 sec)
+
+_______________________________________________________________________________________________________________________________________________________________
+
+4.	List the details of the employees who have joined before end of September 81.
+
+
+mysql> select * from Employee where hiredate<'1981-09-30';
++-------+--------+----------+------+------------+---------+---------+--------+
+| empno | ename  | job      | mgr  | hiredate   | sal     | comm    | deptno |
++-------+--------+----------+------+------------+---------+---------+--------+
+|  7369 | SMITH  | CLERK    | 7902 | 1890-12-17 |  800.00 |    NULL |     20 |
+|  7499 | ALLEN  | SALESMAN | 7698 | 1981-02-20 | 1600.00 |  300.00 |     30 |
+|  7521 | WARD   | SALESMAN | 7698 | 1981-02-22 | 1250.00 |  500.00 |     30 |
+|  7566 | JONES  | MANAGER  | 7839 | 1981-04-02 | 2975.00 |    NULL |     20 |
+|  7654 | MARTIN | SALESMAN | 7698 | 1981-09-28 | 1250.00 | 1400.00 |     30 |
+|  7698 | BLAKE  | MANAGER  | 7839 | 1981-05-01 | 2850.00 |    NULL |     30 |
+|  7782 | CLARK  | MANAGER  | 7839 | 1981-06-09 | 2450.00 |    NULL |     10 |
+|  7844 | TURNER | SALESMAN | 7698 | 1981-09-08 | 1500.00 |    0.00 |     30 |
++-------+--------+----------+------+------------+---------+---------+--------+
+8 rows in set (0.02 sec)
+
+_______________________________________________________________________________________________________________________________________________________________
+
+5.	List Employee Names having I as second character
+
+
+
+mysql> select * from Employee where ename LIKE '_I%';
++-------+--------+-----------+------+------------+---------+------+--------+
+| empno | ename  | job       | mgr  | hiredate   | sal     | comm | deptno |
++-------+--------+-----------+------+------------+---------+------+--------+
+|  7839 | KING   | PRESIDENT | NULL | 1981-11-17 | 5000.00 | NULL |     10 |
+|  7934 | MILLER | CLERK     | 7782 | 1982-01-23 | 1300.00 | NULL |     10 |
++-------+--------+-----------+------+------------+---------+------+--------+
+2 rows in set (0.02 sec)
+
+__________________________________________________________________________________________________________________________________________________________________________________
+
+6.	List Employee Name, Salary, Allowances (40% of Sal), P.F. (10 % of Sal) and Net Salary. Also assign the alias name for the columns
+
+
+
+mysql> select *,(sal-(Allowances + PF))as Net_Salary from (select ename,sal,(0.4*sal) as Allowances,(0.1*sal) as PF from Employee)as e;
++--------+---------+------------+---------+------------+
+| ename  | sal     | Allowances | PF      | Net_Salary |
++--------+---------+------------+---------+------------+
+| SMITH  |  800.00 |    320.000 |  80.000 |    400.000 |
+| ALLEN  | 1600.00 |    640.000 | 160.000 |    800.000 |
+| WARD   | 1250.00 |    500.000 | 125.000 |    625.000 |
+| JONES  | 2975.00 |   1190.000 | 297.500 |   1487.500 |
+| MARTIN | 1250.00 |    500.000 | 125.000 |    625.000 |
+| BLAKE  | 2850.00 |   1140.000 | 285.000 |   1425.000 |
+| CLARK  | 2450.00 |    980.000 | 245.000 |   1225.000 |
+| SCOTT  | 3000.00 |   1200.000 | 300.000 |   1500.000 |
+| KING   | 5000.00 |   2000.000 | 500.000 |   2500.000 |
+| TURNER | 1500.00 |    600.000 | 150.000 |    750.000 |
+| ADAMS  | 1100.00 |    440.000 | 110.000 |    550.000 |
+| JAMES  |  950.00 |    380.000 |  95.000 |    475.000 |
+| FORD   | 3000.00 |   1200.000 | 300.000 |   1500.000 |
+| MILLER | 1300.00 |    520.000 | 130.000 |    650.000 |
++--------+---------+------------+---------+------------+
+14 rows in set (0.00 sec)
+
+_______________________________________________________________________________________________________________________________________________________________
+
+7. List Employee Names with designations who does not report to anybody
+
+
+
+mysql> select ename,job from Employee where mgr IS NULL;
++-------+-----------+
+| ename | job       |
++-------+-----------+
+| KING  | PRESIDENT |
++-------+-----------+
+1 row in set (0.00 sec)
+
+_______________________________________________________________________________________________________________________________________________________________
+8.	List Empno, Ename and Salary in the ascending order of salary.
+
+
+mysql> select empno,ename,sal from Employee ORDER BY sal;
++-------+--------+---------+
+| empno | ename  | sal     |
++-------+--------+---------+
+|  7369 | SMITH  |  800.00 |
+|  7900 | JAMES  |  950.00 |
+|  7876 | ADAMS  | 1100.00 |
+|  7521 | WARD   | 1250.00 |
+|  7654 | MARTIN | 1250.00 |
+|  7934 | MILLER | 1300.00 |
+|  7844 | TURNER | 1500.00 |
+|  7499 | ALLEN  | 1600.00 |
+|  7782 | CLARK  | 2450.00 |
+|  7698 | BLAKE  | 2850.00 |
+|  7566 | JONES  | 2975.00 |
+|  7788 | SCOTT  | 3000.00 |
+|  7902 | FORD   | 3000.00 |
+|  7839 | KING   | 5000.00 |
++-------+--------+---------+
+14 rows in set (0.01 sec)
+
+
+_______________________________________________________________________________________________________________________________________________________________
+
+9.	How many jobs are available in the Organization ?
+
+
+mysql> select COUNT(DISTINCT job) as Openings from Employee;
++----------+
+| Openings |
++----------+
+|        5 |
++----------+
+1 row in set (0.04 sec)
+
+_______________________________________________________________________________________________________________________________________________________________
+
+10.	Determine total payable salary of salesman category
+
+
+
+mysql> select job,SUM(sal) as Total_sal from Employee WHERE job = 'SALESMAN' GROUP BY job;
++----------+-----------+
+| job      | Total_sal |
++----------+-----------+
+| SALESMAN |   5600.00 |
++----------+-----------+
+1 row in set (0.00 sec)
+_______________________________________________________________________________________________________________________________________________________________
+
+11.	List average monthly salary for each job within each department   
+
+
+mysql> select deptno,job,avg(sal) as Avg from Employee GROUP BY deptno,job;
++--------+-----------+-------------+
+| deptno | job       | Avg         |
++--------+-----------+-------------+
+|     20 | CLERK     |  950.000000 |
+|     30 | SALESMAN  | 1400.000000 |
+|     20 | MANAGER   | 2975.000000 |
+|     30 | MANAGER   | 2850.000000 |
+|     10 | MANAGER   | 2450.000000 |
+|     20 | ANALYST   | 3000.000000 |
+|     10 | PRESIDENT | 5000.000000 |
+|     30 | CLERK     |  950.000000 |
+|     10 | CLERK     | 1300.000000 |
++--------+-----------+-------------+
+9 rows in set (0.00 sec)
+
+
+_______________________________________________________________________________________________________________________________________________________________
+
+12.	Use the Same EMP and DEPT table used in the Case study to Display EMPNAME, SALARY and DEPTNAME in which the employee is working.
+
+
+
+mysql> select e.ename,e.sal,d.dname from Employee as e join Department as d ON e.deptno = d.deptno;
++--------+---------+------------+
+| ename  | sal     | dname      |
++--------+---------+------------+
+| CLARK  | 2450.00 | OPERATIONS |
+| KING   | 5000.00 | OPERATIONS |
+| MILLER | 1300.00 | OPERATIONS |
+| SMITH  |  800.00 | RESEARCH   |
+| JONES  | 2975.00 | RESEARCH   |
+| SCOTT  | 3000.00 | RESEARCH   |
+| ADAMS  | 1100.00 | RESEARCH   |
+| FORD   | 3000.00 | RESEARCH   |
+| ALLEN  | 1600.00 | SALES      |
+| WARD   | 1250.00 | SALES      |
+| MARTIN | 1250.00 | SALES      |
+| BLAKE  | 2850.00 | SALES      |
+| TURNER | 1500.00 | SALES      |
+| JAMES  |  950.00 | SALES      |
++--------+---------+------------+
+14 rows in set (0.00 sec)
+
+
+_______________________________________________________________________________________________________________________________________________________________
+
+
+
+mysql> CREATE TABLE job_grades (grade CHAR(1),lowest_sal int NOT NULL,highest_sal int NOT NULL);
+Query OK, 0 rows affected (0.09 sec)
+
+mysql> INSERT INTO job_grades VALUES ('A',0,999),('B',1000,1999),('C',2000,2999),('D',3000,3999),('E',4000,5000);
+Query OK, 5 rows affected (0.03 sec)
+Records: 5  Duplicates: 0  Warnings: 0
+
+mysql> select * from job_grades;
++-------+------------+-------------+
+| grade | lowest_sal | highest_sal |
++-------+------------+-------------+
+| A     |          0 |         999 |
+| B     |       1000 |        1999 |
+| C     |       2000 |        2999 |
+| D     |       3000 |        3999 |
+| E     |       4000 |        5000 |
++-------+------------+-------------+
+5 rows in set (0.00 sec)
+
+
+
+14.	Display the last name, salary and  Corresponding Grade.
+
+
+mysql> select e.ename,e.sal,j.grade from Employee as e join job_grades as j on e.sal where sal BETWEEN J.lowest_sal AND j.highest_sal;
++--------+---------+-------+
+| ename  | sal     | grade |
++--------+---------+-------+
+| SMITH  |  800.00 | A     |
+| ALLEN  | 1600.00 | B     |
+| WARD   | 1250.00 | B     |
+| JONES  | 2975.00 | C     |
+| MARTIN | 1250.00 | B     |
+| BLAKE  | 2850.00 | C     |
+| CLARK  | 2450.00 | C     |
+| SCOTT  | 3000.00 | D     |
+| KING   | 5000.00 | E     |
+| TURNER | 1500.00 | B     |
+| ADAMS  | 1100.00 | B     |
+| JAMES  |  950.00 | A     |
+| FORD   | 3000.00 | D     |
+| MILLER | 1300.00 | B     |
++--------+---------+-------+
+14 rows in set (0.28 sec)
+
+
+__________________________________________________________________________________________________________________________________________________________________________
+
+15.	Display the Emp name and the Manager name under whom the Employee works in the below format .
+
+
+
+mysql> select e1.ename as Employee_Report_to, e2.ename as Manager from Employee e1 join Employee e2 on e1.mgr=e2.empno;
++--------------------+---------+
+| Employee_Report_to | Manager |
++--------------------+---------+
+| SMITH              | FORD    |
+| ALLEN              | BLAKE   |
+| WARD               | BLAKE   |
+| JONES              | KING    |
+| MARTIN             | BLAKE   |
+| BLAKE              | KING    |
+| CLARK              | KING    |
+| SCOTT              | JONES   |
+| TURNER             | BLAKE   |
+| ADAMS              | SCOTT   |
+| JAMES              | BLAKE   |
+| FORD               | JONES   |
+| MILLER             | CLARK   |
++--------------------+---------+
+13 rows in set (0.00 sec)
+
+
+_______________________________________________________________________________________________________________________________________________________________
+
+16.	Display Empname and Total sal where Total Sal (sal + Comm)
+
+
+mysql> select ename, (sal + IFNULL(comm, 0)) as total_salary from Employee;
++--------+--------------+
+| ename  | total_salary |
++--------+--------------+
+| SMITH  |       800.00 |
+| ALLEN  |      1900.00 |
+| WARD   |      1750.00 |
+| JONES  |      2975.00 |
+| MARTIN |      2650.00 |
+| BLAKE  |      2850.00 |
+| CLARK  |      2450.00 |
+| SCOTT  |      3000.00 |
+| KING   |      5000.00 |
+| TURNER |      1500.00 |
+| ADAMS  |      1100.00 |
+| JAMES  |       950.00 |
+| FORD   |      3000.00 |
+| MILLER |      1300.00 |
++--------+--------------+
+14 rows in set (0.00 sec)
+
+____________________________________________________________________________________________________________________________________________________________________________________
+
+17.	Display Empname and Sal whose empno is a odd number
+
+
+mysql> select ename,sal from Employee WHERE mod(empno,2) = 1;
++-------+---------+
+| ename | sal     |
++-------+---------+
+| SMITH |  800.00 |
+| ALLEN | 1600.00 |
+| WARD  | 1250.00 |
+| KING  | 5000.00 |
++-------+---------+
+4 rows in set (0.02 sec)
+
+__________________________________________________________________________________________________________________________________________________________________________________
+
+18.	Display Empname , Rank of sal in Organisation , Rank of Sal in their department
+
+
+
+
+mysql> select ename,sal,deptno,rank() over (order by sal desc) as Rank_Org,rank() over (partition by deptno order by sal desc) as Rank_Dept from employee;
++--------+---------+--------+----------+-----------+
+| ename  | sal     | deptno | Rank_Org | Rank_Dept |
++--------+---------+--------+----------+-----------+
+| KING   | 5000.00 |     10 |        1 |         1 |
+| CLARK  | 2450.00 |     10 |        6 |         2 |
+| MILLER | 1300.00 |     10 |        9 |         3 |
+| SCOTT  | 3000.00 |     20 |        2 |         1 |
+| FORD   | 3000.00 |     20 |        2 |         1 |
+| JONES  | 2975.00 |     20 |        4 |         3 |
+| ADAMS  | 1100.00 |     20 |       12 |         4 |
+| SMITH  |  800.00 |     20 |       14 |         5 |
+| BLAKE  | 2850.00 |     30 |        5 |         1 |
+| ALLEN  | 1600.00 |     30 |        7 |         2 |
+| TURNER | 1500.00 |     30 |        8 |         3 |
+| WARD   | 1250.00 |     30 |       10 |         4 |
+| MARTIN | 1250.00 |     30 |       10 |         4 |
+| JAMES  |  950.00 |     30 |       13 |         6 |
++--------+---------+--------+----------+-----------+
+14 rows in set (0.00 sec)
+
+__________________________________________________________________________________________________________________________________________________________________
+
+
+19.	Display Top 3 Empnames based on their Salary
+
+
+mysql> select ename,sal from Employee ORDER BY sal DESC LIMIT 3;
++-------+---------+
+| ename | sal     |
++-------+---------+
+| KING  | 5000.00 |
+| FORD  | 3000.00 |
+| SCOTT | 3000.00 |
++-------+---------+
+3 rows in set (0.00 sec)
+
+
+_____________________________________________________________________________________________________________________________________________________________________
+
+
+20. Display Empname who has highest Salary in Each Department.
+
+
+mysql> select deptno,ename,sal as Max_Salary from Employee where sal in (select max(sal) from employee group by deptno);
++--------+-------+------------+
+| deptno | ename | Max_Salary |
++--------+-------+------------+
+|     30 | BLAKE |    2850.00 |
+|     20 | SCOTT |    3000.00 |
+|     10 | KING  |    5000.00 |
+|     20 | FORD  |    3000.00 |
++--------+-------+------------+
+4 rows in set (0.00 sec)
+
+
+________________________________________________________________________________________________________________________________________________________________________________________________________________________
+
+                                                                       SALES ANALYSIS
+
+
+
+mysql> CREATE TABLE SalesPeople (snum int Primary Key,sname Varchar(30) NOT NULL,city Varchar(30) Not NULL,comm Decimal(10,2));
+Query OK, 0 rows affected (0.06 sec)
+
+mysql> insert into SalesPeople values(1001, 'Peel', 'London', 0.12),(1002, 'Serres', 'San Jose', 0.13),(1003, 'Axelrod', 'New York', 0.10),(1004, 'Motika', 'London', 0.11),
+(1007, 'Rafkin', 'Barcelona', 0.15);
+Query OK, 5 rows affected (0.01 sec)
+Records: 5  Duplicates: 0  Warnings: 0
+
+
+mysql> select * from SalesPeople;
++------+---------+-----------+------+
+| snum | sname   | city      | comm |
++------+---------+-----------+------+
+| 1001 | Peel    | London    | 0.12 |
+| 1002 | Serres  | San Jose  | 0.13 |
+| 1003 | Axelrod | New York  | 0.10 |
+| 1004 | Motika  | London    | 0.11 |
+| 1007 | Rafkin  | Barcelona | 0.15 |
++------+---------+-----------+------+
+5 rows in set (0.00 sec)
+
+mysql> CREATE TABLE Customer (cnum int Primary Key,cname Varchar(30) NOT NULL,city Varchar(30) Not NULL,rating int NOT NULL,snum int NOT NULL,FOREIGN KEY (snum) REFERENCES SalesPeople(snum));
+Query OK, 0 rows affected (0.10 sec)
+
+mysql> insert into Customer values(2001, 'Hoffman', 'London',100,1001),(2002, 'Giovanne', 'Rome',200,1003), (2003, 'Liu', 'San Jose',300,1002), (2004, 'Grass', 'Berlin',100,1002),
+(2006, 'Clemens', 'London',300,1007), (2007, 'Pereira', 'Rome',100,1004), (2008, 'James', 'London',200,1007);
+Query OK, 7 rows affected (0.01 sec)
+Records: 7  Duplicates: 0  Warnings: 0
+
+mysql> select * from Customer;
++------+----------+----------+--------+------+
+| cnum | cname    | city     | rating | snum |
++------+----------+----------+--------+------+
+| 2001 | Hoffman  | London   |    100 | 1001 |
+| 2002 | Giovanne | Rome     |    200 | 1003 |
+| 2003 | Liu      | San Jose |    300 | 1002 |
+| 2004 | Grass    | Berlin   |    100 | 1002 |
+| 2006 | Clemens  | London   |    300 | 1007 |
+| 2007 | Pereira  | Rome     |    100 | 1004 |
+| 2008 | James    | London   |    200 | 1007 |
++------+----------+----------+--------+------+
+7 rows in set (0.00 sec)
+
+
+mysql> CREATE TABLE Orders (onum int Primary Key,amt decimal(10,2) NOT NULL,odate date Not NULL,cnum int NOT NULL,snum int NOT NULL,FOREIGN KEY (snum) REFERENCES SalesPeople(snum),
+FOREIGN KEY(cnum) REFERENCES Customer(cnum));
+Query OK, 0 rows affected (0.10 sec)
+
+mysql> insert into Orders values(3001,18.69, '1994-10-03',2008,1007),(3002,1900.10, '1994-10-03',2007,1004),(3003,767.19, '1994-10-03',2001,1001),(3005,5160.45,'1994-10-03',2003,1002),
+(3006,1098.16, '1994-10-04',2008,1007),(3007,75.75, '1994-10-05',2004,1002),(3008,4723.00, '1994-10-05',2006,1001),(3009,1713.23, '1994-10-04',2002,1003),
+(3010,1309.95, '1994-10-06',2004,1002),(3011,9891.88, '1994-10-06',2006,1001);
+Query OK, 10 rows affected (0.01 sec)
+Records: 10  Duplicates: 0  Warnings: 0
+
+mysql> select * from Orders;
++------+---------+------------+------+------+
+| onum | amt     | odate      | cnum | snum |
++------+---------+------------+------+------+
+| 3001 |   18.69 | 1994-10-03 | 2008 | 1007 |
+| 3002 | 1900.10 | 1994-10-03 | 2007 | 1004 |
+| 3003 |  767.19 | 1994-10-03 | 2001 | 1001 |
+| 3005 | 5160.45 | 1994-10-03 | 2003 | 1002 |
+| 3006 | 1098.16 | 1994-10-04 | 2008 | 1007 |
+| 3007 |   75.75 | 1994-10-05 | 2004 | 1002 |
+| 3008 | 4723.00 | 1994-10-05 | 2006 | 1001 |
+| 3009 | 1713.23 | 1994-10-04 | 2002 | 1003 |
+| 3010 | 1309.95 | 1994-10-06 | 2004 | 1002 |
+| 3011 | 9891.88 | 1994-10-06 | 2006 | 1001 |
++------+---------+------------+------+------+
+10 rows in set (0.00 sec)
+
+
+
+_______________________________________________________________________________________________________________________________________________________________
+
+4.	Write a query to match the salespeople to the customers according to the city they are living.
+
+
+
+mysql> select s.sname,c.cname,c.city from SalesPeople as s join Customer as c ON s.city=c.city;
++--------+---------+----------+
+| sname  | cname   | city     |
++--------+---------+----------+
+| Motika | Hoffman | London   |
+| Peel   | Hoffman | London   |
+| Serres | Liu     | San Jose |
+| Motika | Clemens | London   |
+| Peel   | Clemens | London   |
+| Motika | James   | London   |
+| Peel   | James   | London   |
++--------+---------+----------+
+7 rows in set (0.02 sec)
+
+_______________________________________________________________________________________________________________________________________________________________
+
+5.	Write a query to select the names of customers and the salespersons who are providing service to them.
+
+
+mysql> select s.sname as SalesPerson,c.cname as CustomerName from SalesPeople as s join Customer as c ON s.snum=c.snum;
++-------------+--------------+
+| SalesPerson | CustomerName |
++-------------+--------------+
+| Peel        | Hoffman      |
+| Serres      | Liu          |
+| Serres      | Grass        |
+| Axelrod     | Giovanne     |
+| Motika      | Pereira      |
+| Rafkin      | Clemens      |
+| Rafkin      | James        |
++-------------+--------------+
+7 rows in set (0.00 sec)
+
+_______________________________________________________________________________________________________________________________________________________________
+
+6.	Write a query to find out all orders by customers not located in the same cities as that of their salespeople
+
+
+
+mysql> select onum,cname,orders.cnum,orders.snum from SalesPeople,Orders,Customer where Customer.city<>SalesPeople.city AND
+Orders.cnum = Customer.cnum AND Orders.snum = SalesPeople.snum;
++------+----------+------+------+
+| onum | cname    | cnum | snum |
++------+----------+------+------+
+| 3007 | Grass    | 2004 | 1002 |
+| 3010 | Grass    | 2004 | 1002 |
+| 3009 | Giovanne | 2002 | 1003 |
+| 3002 | Pereira  | 2007 | 1004 |
+| 3001 | James    | 2008 | 1007 |
+| 3006 | James    | 2008 | 1007 |
++------+----------+------+------+
+6 rows in set (0.00 sec)
+
+
+_______________________________________________________________________________________________________________________________________________________________
+
+7.	Write a query that lists each order number followed by name of customer who made that order
+
+
+mysql> select o.onum,c.cname from Orders as o,Customer as c where o.cnum = c.cnum;
++------+----------+
+| onum | cname    |
++------+----------+
+| 3003 | Hoffman  |
+| 3009 | Giovanne |
+| 3005 | Liu      |
+| 3007 | Grass    |
+| 3010 | Grass    |
+| 3008 | Clemens  |
+| 3011 | Clemens  |
+| 3002 | Pereira  |
+| 3001 | James    |
+| 3006 | James    |
++------+----------+
+10 rows in set (0.00 sec)
+
+
+_______________________________________________________________________________________________________________________________________________________________
+
+8.	Write a query that finds all pairs of customers having the same rating
+
+
+mysql> select a.cname as customer_1,b.cname as customer_2,a.rating from Customer as a,Customer as b where a.rating = b.rating and a.cnum <> b.cnum;
+
++------------+------------+--------+
+| customer_1 | customer_2 | rating |
++------------+------------+--------+
+| Pereira    | Hoffman    |    100 |
+| Grass      | Hoffman    |    100 |
+| James      | Giovanne   |    200 |
+| Clemens    | Liu        |    300 |
+| Pereira    | Grass      |    100 |
+| Hoffman    | Grass      |    100 |
+| Liu        | Clemens    |    300 |
+| Grass      | Pereira    |    100 |
+| Hoffman    | Pereira    |    100 |
+| Giovanne   | James      |    200 |
++------------+------------+--------+
+10 rows in set (0.00 sec)
+
+
+_______________________________________________________________________________________________________________________________________________________________
+
+9.	Write a query to find out all pairs of customers served by a single salesperson
+
+
+mysql> select s.sname,c.cname from SalesPeople as s join Customer as c on s.snum = c.snum GROUP BY sname;
++---------+----------+
+| sname   | cname    |
++---------+----------+
+| Peel    | Hoffman  |
+| Serres  | Liu      |
+| Axelrod | Giovanne |
+| Motika  | Pereira  |
+| Rafkin  | Clemens  |
++---------+----------+
+5 rows in set (0.00 sec)
+
+_______________________________________________________________________________________________________________________________________________________________
+
+
+10.	Write a query that produces all pairs of salespeople who are living in same city
+
+
+mysql> select a.sname,b.sname from SalesPeople as a,SalesPeople as b where a.snum<>b.snum and a.city = b.city;
++--------+-------+
+| sname  | sname |
++--------+-------+
+| Motika | Peel  |
++--------+-------+
+1 row in set (0.06 sec)
+
+_______________________________________________________________________________________________________________________________________________________________
+
+11.	Write a Query to find all orders credited to the same salesperson who services Customer 2008
+
+
+mysql> select onum from Orders where snum in(select snum from Customer where cnum='2008');
++------+
+| onum |
++------+
+| 3001 |
+| 3006 |
++------+
+2 rows in set (0.50 sec)
+
+_______________________________________________________________________________________________________________________________________________________________
+
+
+12.	Write a Query to find out all orders that are greater than the average for Oct 4th
+
+
+mysql> select * from Orders where amt>(select avg(amt) from Orders where odate = '1994-10-04');
++------+---------+------------+------+------+
+| onum | amt     | odate      | cnum | snum |
++------+---------+------------+------+------+
+| 3002 | 1900.10 | 1994-10-03 | 2007 | 1004 |
+| 3005 | 5160.45 | 1994-10-03 | 2003 | 1002 |
+| 3008 | 4723.00 | 1994-10-05 | 2006 | 1001 |
+| 3009 | 1713.23 | 1994-10-04 | 2002 | 1003 |
+| 3011 | 9891.88 | 1994-10-06 | 2006 | 1001 |
++------+---------+------------+------+------+
+5 rows in set (0.06 sec)
+
+_______________________________________________________________________________________________________________________________________________________________
+
+
+13.	Write a Query to find all orders attributed to salespeople in London.
+
+
+mysql> select snum,cnum from Orders where cnum in(select cnum from Customer where city = 'London');
++------+------+
+| snum | cnum |
++------+------+
+| 1001 | 2001 |
+| 1001 | 2006 |
+| 1001 | 2006 |
+| 1007 | 2008 |
+| 1007 | 2008 |
++------+------+
+5 rows in set (0.03 sec)
+
+_______________________________________________________________________________________________________________________________________________________________
+
+
+14.	Write a query to find all the customers whose cnum is 1000 above the snum of Serres. 
+
+
+mysql> select cnum,cname from Customer where cnum>(select snum+1000 from SalesPeople where sname='Serres');
++------+---------+
+| cnum | cname   |
++------+---------+
+| 2003 | Liu     |
+| 2004 | Grass   |
+| 2006 | Clemens |
+| 2007 | Pereira |
+| 2008 | James   |
++------+---------+
+5 rows in set (0.00 sec)
+
+_______________________________________________________________________________________________________________________________________________________________
+
+15.	Write a query to count customers with ratings above San Jose’s average rating.
+
+
+mysql> select cnum,rating from Customer where rating>(select avg(rating) from Customer where city= 'San Jose');
+Empty set (0.00 sec)
+
+
+_______________________________________________________________________________________________________________________________________________________________
+
+16.	Write a query to show each salesperson with multiple customers.
+
+
+mysql> select sname as Salesperson,snum from SalesPeople where snum in (select snum from Customer group by snum having count(snum)>1);
++-------------+------+
+| Salesperson | snum |
++-------------+------+
+| Serres      | 1002 |
+| Rafkin      | 1007 |
++-------------+------+
+2 rows in set (0.00 sec)
+
+
+
+
+
+
+
+
+
+
